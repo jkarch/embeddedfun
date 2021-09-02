@@ -133,12 +133,12 @@ public:
 	}
 
 	//returns buffer fill state
-	unsigned int elementCount(void)  {
+	int elementCount(void)  {
 		return elementsInBuffer;
 	}
 
 	//returns buffer size
-	unsigned int bufferSize(void) {
+	int bufferSize(void) {
 		return maxElementCount;
 	}
 
