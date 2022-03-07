@@ -88,8 +88,8 @@ public:
 	//returns the number of elements read, if not the requested amount
 	int consumeElements(std::vector<T>& out, int n)  {
 		out=std::vector<T>(n);
+		T temp;
 		for(int i=0;i<n;i++)  {
-			int temp;
 			if(!consumeElement(temp))  {
 				return i;
 			}
