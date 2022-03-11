@@ -29,6 +29,7 @@ Test code for the circular buffer tester class.
 
 
 int main(void) {
+	bool overflow;
 	static constexpr unsigned int buffsize=10;
 	jCircularBuffer<int> myBuff = jCircularBuffer<int>();
 	myBuff.init(buffsize);
@@ -128,12 +129,12 @@ int main(void) {
 	}
 	std::cout << "\n";
 
-	std::cout << "loading another 4 which should be successful: " << myBuff.writeElements(output4) << "\n";
+	std::cout << "loading another 4 which should be successful: " << myBuff.writeElements(output4, overflow) << "\n";
 
 
 	std::cout << "circular buffer size: " << myBuff.bufferSize() << "\n";
 
-	std::cout << "current element count after adding 4: " << myBuff.elementCount() << "\n";
+	std::cout << "current element count after adding 4 more: " << myBuff.elementCount() << "\n";
 
 	std::cout << "readout of filled buffer again\n";
 	std::vector<int> output5 = myBuff.readOut();
@@ -142,7 +143,7 @@ int main(void) {
 	}
 
 	std::cout << "current element count after readout should be 8  " << myBuff.elementCount() << "\n";
-	std::cout << "loading another 8 which should only allow 2 for total of 10 with 2 loaded: " << myBuff.writeElements(output5) << "\n";
+	std::cout << "loading another 8 which should only allow 2 for total of 10 with 2 loaded: " << myBuff.writeElements(output5,overflow) << "\n";
 	std::cout << "current element count after load should be 10  " << myBuff.elementCount() << "\n";
 
 
@@ -155,7 +156,7 @@ int main(void) {
 
 	std::cout << "circular buffer size after consuming: " << myBuff.bufferSize() << "\n";
 	std::cout << "current element count after consuming: " << myBuff.elementCount() << "\n";
-	std::cout << "loading another 16 which should only allow 10 for total of 10 with 10 loaded: " << myBuff.writeElements(output) << "\n";
+	std::cout << "loading another 16 which should only allow 10 for total of 10 with 10 loaded: " << myBuff.writeElements(output,overflow) << "\n";
 	std::cout << "current element count after load should be 10  " << myBuff.elementCount() << "\n";
 	std::cout << "\n";
 

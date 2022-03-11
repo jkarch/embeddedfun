@@ -41,14 +41,17 @@ private:
 	int elementsInBuffer;
 
 	//move write and read index pointers and adjust buffer size
-	void advanceWriteIndex(void){
+	bool advanceWriteIndex(void){
 		//advance buffer pointer up to total filled count and roll over
 		//or advance buffer pointer if filled...
-		head = (head + 1) % maxElementCount;
-		head%= maxElementCount;
+		head++;
+		head%= maxElementCount; //if overflow return to 0
 		elementsInBuffer++;
-		if(elementsInBuffer > maxElementCount)
-			elementsInBuffer = maxElementCount;
+		if(elementsInBuffer > maxElementCount)  {
+			advanceReadIndex();
+			return false;
+		}
+		return true;
 	}
 
 	bool advanceReadIndex(void)  {
@@ -104,30 +107,16 @@ public:
 
 	//add single element	
 	bool writeElement(T element)  {
-		//returns true if buffer overwriting
+		//returns false if buffer overwriting, true if not.
 		buff[head]=element;
-		advanceWriteIndex();
-		if(elementsInBuffer > maxElementCount)
-		{
-			//"consume element by overwriting"
-			advanceReadIndex();
-			return true;
-		}
-		return false;
+		return advanceWriteIndex();
 	}
 
-	//returns number of elements written from an input vector before overflowing,
-	// or if not full, the size of the buffer written.
-	int writeElements(std::vector<T>& elements)  {
+	//write as many elements as we want even if it overflows
+	int writeElements(std::vector<T>& elements, bool &overflow)  {
 
 		for(int i=0;i<elements.size();i++)  {
-			
-			//if it overflows, return
-			writeElement(elements[i]);
-			if(elementCount()==bufferSize())
-			{
-				return i+1;
-			}
+			overflow = writeElement(elements[i]);
 		}
 		return elements.size();
 	}
